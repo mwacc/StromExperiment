@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * This is special aggregation structure that emits aggregated values by time interval 
+ * (data is agggregated for some period of time) or  by number of counted objects.
+ * */
 public class SlidingWindow implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,6 +29,7 @@ public class SlidingWindow implements Serializable {
         initAt = System.currentTimeMillis();
     }
 
+    /* Check ready aggregated data to be emitted or not yet */
     public boolean isReady() {
         System.out.println( String.format("SlidingWindow, time %d, objects %d", (System.currentTimeMillis() - initAt), objectCounter) );
         if( System.currentTimeMillis() - initAt > windowLengthInSeconds ) return true;
