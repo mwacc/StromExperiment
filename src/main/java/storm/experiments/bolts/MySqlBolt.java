@@ -1,20 +1,26 @@
 package storm.experiments.bolts;
 
+import backtype.storm.task.OutputCollector;
+import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
+import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
 import storm.experiments.model.VisitorsFact;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.Map;
 
-public class MySqlBolt extends BaseBasicBolt {
+public class MySqlBolt extends BaseRichBolt {
     private static final long serialVersionUID = 1L;
 
     private transient Connection conn = null;
     private transient PreparedStatement preparedStatement;
+
+    private OutputCollector collector;
 
     public MySqlBolt() {
         initDb();
@@ -34,7 +40,13 @@ public class MySqlBolt extends BaseBasicBolt {
     }
 
     @Override
-    public void execute(Tuple tuple, BasicOutputCollector basicOutputCollector) {
+    public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
+        System.out.println("Prepare second bolt");
+        this.collector = outputCollector;
+    }
+
+    @Override
+    public void execute(Tuple tuple) {
         if( tuple != null ) {
             try {
                 System.out.println(String.format("Push in statistic queue, [%s, %s, %d]", tuple.getString(0), tuple.getString(1), tuple.getInteger(2)));
