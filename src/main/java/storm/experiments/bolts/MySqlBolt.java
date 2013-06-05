@@ -23,7 +23,7 @@ public class MySqlBolt extends BaseRichBolt {
     private OutputCollector collector;
 
     public MySqlBolt() {
-        initDb();
+        //initDb();
     }
 
     private void initDb() {
@@ -47,14 +47,17 @@ public class MySqlBolt extends BaseRichBolt {
 
     @Override
     public void execute(Tuple tuple) {
-        if( tuple != null ) {
+       /* if( tuple != null ) {
             try {
                 System.out.println(String.format("Push in statistic queue, [%s, %s, %d]", tuple.getString(0), tuple.getString(1), tuple.getInteger(2)));
                 save(new VisitorsFact(tuple.getString(1), tuple.getString(0), tuple.getInteger(2)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }  */
+
+        System.out.println("Inside second BOLT");
+        collector.fail(tuple);
     }
 
     @Override

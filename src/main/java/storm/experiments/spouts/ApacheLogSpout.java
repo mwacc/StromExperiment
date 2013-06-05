@@ -46,14 +46,20 @@ public class ApacheLogSpout extends BaseRichSpout {
         }
     }
 
+    private boolean b = true;
     @Override
-    public void nextTuple() {
+    public void nextTuple() {    /*
         String logRow = queue.poll();
         if( logRow == null ) {
             Utils.sleep(50);
         } else {
             String[] parameters = logRow.split(",");
             collector.emit( new Values(parameters[1], parameters[2]));
+        }  */
+        if( b ) {
+            System.out.println("\n\n\n Emit from spout  " + b);
+            collector.emit(new Values("Test1", "test2"), "1");
+            b = false;
         }
     }
 
@@ -66,5 +72,17 @@ public class ApacheLogSpout extends BaseRichSpout {
                 System.exit(1);
             }
         }
+    }
+
+    @Override
+    public void fail(Object msgId) {
+        System.out.println("Spout#FAIL " + msgId);
+        System.out.println("Resending message " + msgId);
+        b = true;
+    }
+
+    @Override
+    public void ack(Object msgId) {
+        System.out.println("Spout#ACK " + msgId);
     }
 }

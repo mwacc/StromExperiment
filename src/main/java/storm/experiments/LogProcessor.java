@@ -2,6 +2,9 @@ package storm.experiments;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
+import backtype.storm.StormSubmitter;
+import backtype.storm.generated.AlreadyAliveException;
+import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 import storm.experiments.bolts.MySqlBolt;
@@ -16,12 +19,12 @@ public class LogProcessor {
 
     }
 
-    public void performStorm() throws SQLException {
+    public void performStorm() throws SQLException, AlreadyAliveException, InvalidTopologyException {
         TopologyBuilder builder = new TopologyBuilder();
 
         System.out.println("Start running Storm");
 
-        builder.setSpout("logGenerator", new ApacheLogSpout("/tmp/storm/log.log"), 3);
+        builder.setSpout("logGenerator", new ApacheLogSpout("/tmp/storm/log.log"), 1);
         builder.setBolt("counter", new RollingCountBolt(5, 20), 4).fieldsGrouping("logGenerator", new Fields("url", "country"));
         builder.setBolt("mysql", new MySqlBolt(), 1).shuffleGrouping("counter");
 
@@ -30,8 +33,9 @@ public class LogProcessor {
 
         conf.setMaxTaskParallelism(3);
 
-        LocalCluster cluster = new LocalCluster();
-        cluster.submitTopology("log-count", conf, builder.createTopology());
+        //LocalCluster cluster = new LocalCluster();
+        //cluster.submitTopology("log-count", conf, builder.createTopology());
+        StormSubmitter.submitTopology("log-count", conf, builder.createTopology());
 
     }
 

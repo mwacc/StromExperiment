@@ -23,6 +23,7 @@
             <groupId>storm</groupId>
             <artifactId>storm</artifactId>
             <version>0.8.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -80,6 +81,7 @@
                         </goals>
                     </execution>
                 </executions>
+
             </plugin>
         </plugins>
     </build>
