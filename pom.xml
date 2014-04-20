@@ -22,7 +22,8 @@
         <dependency>
             <groupId>storm</groupId>
             <artifactId>storm</artifactId>
-            <version>0.8.2</version>
+            <version>0.9.0.1</version>
+            <!-- keep storm out of the jar-with-dependencies -->
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -45,6 +46,14 @@
             <artifactId>hazelcast</artifactId>
             <version>2.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 
@@ -69,7 +78,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>storm.experiments.LogProcessor</mainClass>
+                            <mainClass>storm.experiment2.WordCountEngine</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
